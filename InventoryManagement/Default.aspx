@@ -1,42 +1,29 @@
 ﻿<%@ Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="InventoryManagement._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <br />
+     <p>Scan UPC: <asp:TextBox ID="upcCode" runat="server"></asp:TextBox><br /><br /><asp:Button ID="searchBtn" runat="server" Text="Item Search!" /></p>
+    <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
 
-    <div class="jumbotron">
-        <h1>ASP.NET</h1>
-        <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS, and JavaScript.</p>
-        <p><a href="http://www.asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <h2>Getting started</h2>
-            <p>
-                ASP.NET Web Forms lets you build dynamic websites using a familiar drag-and-drop, event-driven model.
-            A design surface and hundreds of controls and components let you rapidly build sophisticated, powerful UI-driven sites with data access.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301948">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Get more libraries</h2>
-            <p>
-                NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301949">Learn more &raquo;</a>
-            </p>
-        </div>
-        <div class="col-md-4">
-            <h2>Web Hosting</h2>
-            <p>
-                You can easily find a web hosting company that offers the right mix of features and price for your applications.
-            </p>
-            <p>
-                <a class="btn btn-default" href="http://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
-            </p>
-        </div>
-    </div>
-
+    <asp:Panel ID="updatePannel" runat="server" Visible="False">
+        <table>
+            <tbody>
+                <tr><td>UPC:</td><td><asp:TextBox ID="upd_UPC" runat="server" Enabled="False" Width="295px"></asp:TextBox></td></tr>
+                <tr><td>Item Name:</td><td><asp:TextBox ID="upd_itemName" runat="server" Width="295px"></asp:TextBox></td></tr>
+                <tr><td>Item Description:</td><td><asp:TextBox ID="upd_itemDesc" runat="server" Width="295px"></asp:TextBox></td></tr>
+                <tr><td>Amount on hand:</td><td><asp:TextBox ID="upd_count" runat="server" Width="80px"></asp:TextBox></td></tr>
+                <tr><td>Haber Electric Inventory Code:</td><td> <asp:TextBox ID="upd_inventoryCode" runat="server" Width="295px"></asp:TextBox></td></tr>
+                <tr><td>Last Updated: </td><td><asp:TextBox ID="upd_lastUpdated" runat="server" Enabled="False" Width="295px"></asp:TextBox></td></tr>
+            </tbody>
+        </table>
+        <br /><br />
+        <asp:Button ID="upd_UpdateButton" runat="server" Text="Update Inventory!" OnClick="upd_UpdateButton_Click" />
+        <br /><br />
+        <asp:Button ID="upd_Plus1" runat="server" Text="+1" OnClick="upd_Plus1_Click" />
+        <asp:Button ID="upd_Minus1" runat="server" Text="-1" OnClick="upd_Minus1_Click" />
+        <br />
+        <asp:Button ID="upd_Plus10" runat="server" Text="+10" OnClick="upd_Plus10_Click" />
+        <asp:Button ID="upd_Minus10" runat="server" Text="-10" OnClick="upd_Minus10_Click" />
+        
+    </asp:Panel>
 </asp:Content>
