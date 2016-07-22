@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -36,8 +37,8 @@ namespace InventoryManagement
         protected void btn_email_Click(object sender, EventArgs e)
         {
             var fromAddress = new MailAddress("jira@haberelectric.com", "JIRA Technical User [HE Inventory]");
-            var toAddress = new MailAddress("steve.t.haber@gmail.com", "Steve");
-            const string fromPassword = "Eq*Ng88#h9&Z`'x;K^yp";
+
+            string fromPassword = (new StreamReader(@"C:\Users\Administrator\Documents\Visual Studio 2015\Projects\InventoryManagement\InventoryManagement\EmailAuth.txt")).ReadToEnd();
             string subject = "Haber Electric Inventory List - " + DateTime.Now.ToShortDateString();
             string body = GetGridviewData(GridView1);
 
@@ -50,15 +51,16 @@ namespace InventoryManagement
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
             };
-            using (var message = new MailMessage(fromAddress, toAddress)
-            {
-                IsBodyHtml = true,
-                Subject = subject,
-                Body = body
-            })
-            {
-                smtp.Send(message);
-            }
+            var message = new MailMessage();
+            message.From = fromAddress;
+             message.To.Add(new MailAddress("arthur@haberelectric.com"));
+             message.To.Add(new MailAddress("guy@haberelectric.com"));
+             message.To.Add(new MailAddress("jaclyn@haberelectric.com"));
+            //message.To.Add(new MailAddress("steve.t.haber@gmail.com"));
+            message.IsBodyHtml = true;
+            message.Subject = subject;
+            message.Body = body;
+            smtp.Send(message);
         }
         public string GetGridviewData(GridView gv)
         {

@@ -243,3 +243,8 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+
+#For AWS Auth
+/InventoryManagement/credentials.txt
+credentials.txt
+/InventoryManagement/EmailAuth.txt
