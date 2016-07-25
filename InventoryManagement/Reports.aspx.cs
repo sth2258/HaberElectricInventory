@@ -38,7 +38,7 @@ namespace InventoryManagement
         {
             var fromAddress = new MailAddress("jira@haberelectric.com", "JIRA Technical User [HE Inventory]");
 
-            string fromPassword = (new StreamReader(@"C:\Users\Administrator\Documents\Visual Studio 2015\Projects\InventoryManagement\InventoryManagement\EmailAuth.txt")).ReadToEnd();
+            string fromPassword = (new StreamReader(ConfigurationManager.AppSettings["emailPsw"].ToString())).ReadToEnd();
             string subject = "Haber Electric Inventory List - " + DateTime.Now.ToShortDateString();
             string body = GetGridviewData(GridView1);
 
