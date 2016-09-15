@@ -2,7 +2,7 @@
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <br />
-     <p>Scan UPC: <asp:TextBox ID="upcCode" runat="server"></asp:TextBox><br /><br /><asp:Button ID="searchBtn" runat="server" Text="Item Search!" /></p>
+     <p>Scan UPC (or enter HE Inventory Code): <asp:TextBox ID="upcCode" runat="server"></asp:TextBox><br /><br /><asp:Button ID="searchBtn" runat="server" Text="Item Search!" /></p>
     <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
 
     <asp:Panel ID="updatePannel" runat="server" Visible="False">
@@ -24,6 +24,7 @@
         <br />
         <asp:Button ID="upd_Plus10" runat="server" Text="+10" OnClick="upd_Plus10_Click" />
         <asp:Button ID="upd_Minus10" runat="server" Text="-10" OnClick="upd_Minus10_Click" />
-        
+        <br /><br />
+        <asp:Button ID="btn_Delete" runat="server" Text="Delete Item" OnClientClick="return confirm('Are you certain you want to delete this product?');" OnClick="btn_Delete_Click" />
     </asp:Panel>
 </asp:Content>

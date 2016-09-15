@@ -29,7 +29,7 @@ namespace InventoryManagement
                 Upc = new_UPC.Text,
                 ItemDesc = new_itemDesc.Text,
                 ItemName = new_itemName.Text,
-                HaberCode = new_inventoryCode.Text,
+                HaberCode = new_inventoryCode.Text.ToUpper(),
                 UpdateDate = DateTime.Now.Ticks
 
             };

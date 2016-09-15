@@ -65,7 +65,7 @@ namespace InventoryManagement
             return list;
         }
 
-        public static InventoryDAO GetProduct(string text)
+        public static InventoryDAO GetProductByUPC(string text)
         {
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
 
@@ -118,6 +118,19 @@ namespace InventoryManagement
             return dao;
 
         }
+        public static InventoryDAO GetProductByHECode(string text)
+        {
+            List<InventoryDAO> a = Inventory.GetAllProducts();
+            foreach (InventoryDAO b in a)
+            {
+                if (b.HaberCode.ToUpper() == text.ToUpper())
+                {
+                    return b;
+                }
+            }
+            return null;
+                
+        }
 
         internal static void PutProduct(InventoryDAO dao)
         {
@@ -138,6 +151,22 @@ namespace InventoryManagement
             };
             var response = client.PutItem(request);
         }
+
+        internal static void DeleteProduct(InventoryDAO dao)
+        {
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
+            string tableName = "HaberElectricInventory";
+            var request = new DeleteItemRequest
+            {
+                TableName = tableName,
+                Key = new Dictionary<string, AttributeValue>() { { "UPC", new AttributeValue { S = dao.Upc } } },
+            };
+            var response = client.DeleteItem(request);
+            Debug.WriteLine("Delete performed to " + dao.Upc);
+        }
+
+        
 
         internal static void UpdateProduct(string index, string attr, int value)
         {

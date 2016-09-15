@@ -22,13 +22,23 @@ namespace InventoryManagement
                 if (upcCode.Text != string.Empty)
                 {
                     Label1.Text = upcCode.Text;
-                    InventoryDAO dao = Inventory.GetProduct(upcCode.Text);
+                    InventoryDAO dao = Inventory.GetProductByUPC(upcCode.Text);
 
                     if (dao == null)
                     {
-                        Label1.Text = "UPC Not Found! Please add to inventory database!";
+                        //try to get the product from the HE Code
+                        InventoryDAO dao2 = Inventory.GetProductByHECode(upcCode.Text);
+                        if (dao2 == null)
+                        {
+                            Label1.Text = "UPC or HE Code Not Found! Please add to inventory database!";
+                        }
+                        else
+                        {
+                            dao = dao2;
+                            Label1.Text = dao.Upc;
+                        }
                     }
-                    else
+                    if(dao != null)
                     {
                         updatePannel.Visible = true;
                         upd_count.Text = dao.Count.ToString();
@@ -136,6 +146,17 @@ namespace InventoryManagement
                     Label1.Text = amt + " item(s) have been added to inventory!";
                 }
             }
+        }
+
+        protected void btn_Delete_Click(object sender, EventArgs e)
+        {
+            InventoryDAO a = (InventoryDAO)Session["PreviousDAO"];
+            InventoryDAO dao = Inventory.GetProductByUPC(a.Upc);
+            Inventory.DeleteProduct(dao);
+
+            Session["PreviousDAO"] = null;
+            Label1.Text = a.Upc + " successfully deleted.";
+
         }
     }
 }
