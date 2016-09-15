@@ -17,6 +17,7 @@ namespace InventoryManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             List<InventoryDAO> a = Inventory.GetAllProducts();
+            a.Sort((emp1, emp2) => emp1.ItemName.CompareTo(emp2.ItemName));
             GridView1.DataSource = a;
             GridView1.DataBind();
 
