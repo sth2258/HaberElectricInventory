@@ -3,6 +3,7 @@ using Amazon.DynamoDBv2.DocumentModel;
 using Amazon.DynamoDBv2.Model;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,14 @@ namespace InventoryManagement
 {
     public static class Inventory
     {
-
+        public static bool IsVisibleItemSet(string selectedCategory)
+        {
+            if (new List<string>(ConfigurationManager.AppSettings["cfg_ValsThatTriggerDropdowns"].ToString().Split(',')).Contains(selectedCategory))
+            {
+                return true;
+            }
+            return false;
+        }
         public static List<InventoryDAO> GetAllProducts()
         {
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
@@ -46,14 +54,32 @@ namespace InventoryManagement
                         case "ItemDescription":
                             dao.ItemDesc = row.Value.S;
                             break;
-                        case "ItemName":
-                            dao.ItemName = row.Value.S;
-                            break;
                         case "UPC":
                             dao.Upc = row.Value.S;
                             break;
                         case "Updated":
                             dao.UpdateDate = long.Parse(row.Value.N);
+                            break;
+                        case "Brand":
+                            dao.Brand = row.Value.S;
+                            break;
+                        case "BulbType":
+                            dao.BulbType = row.Value.S;
+                            break;
+                        case "Category":
+                            dao.Category = row.Value.S;
+                            break;
+                        case "Color":
+                            dao.Color = row.Value.S;
+                            break;
+                        case "CriticalInventoryItem":
+                            dao.CriticalInventoryItem = row.Value.BOOL;
+                            break;
+                        case "Wattage":
+                            dao.Wattage = row.Value.S;
+                            break;
+                        case "Length":
+                            dao.Length = row.Value.S;
                             break;
 
                     }
@@ -102,14 +128,32 @@ namespace InventoryManagement
                     case "ItemDescription":
                         dao.ItemDesc = row.Value.S;
                         break;
-                    case "ItemName":
-                        dao.ItemName = row.Value.S;
-                        break;
                     case "UPC":
                         dao.Upc = row.Value.S;
                         break;
                     case "Updated":
                         dao.UpdateDate = long.Parse(row.Value.N);
+                        break;
+                    case "Brand":
+                        dao.Brand = row.Value.S;
+                        break;
+                    case "BulbType":
+                        dao.BulbType = row.Value.S;
+                        break;
+                    case "Category":
+                        dao.Category = row.Value.S;
+                        break;
+                    case "Color":
+                        dao.Color = row.Value.S;
+                        break;
+                    case "CriticalInventoryItem":
+                        dao.CriticalInventoryItem = row.Value.BOOL;
+                        break;
+                    case "Wattage":
+                        dao.Wattage = row.Value.S;
+                        break;
+                    case "Length":
+                        dao.Length = row.Value.S;
                         break;
 
                 }
@@ -137,17 +181,28 @@ namespace InventoryManagement
             AmazonDynamoDBClient client = new AmazonDynamoDBClient();
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
             string tableName = "HaberElectricInventory";
+            Dictionary<string, AttributeValue> item = new Dictionary<string, AttributeValue>();
+            item.Add("UPC", new AttributeValue { S = dao.Upc });
+            item.Add("Count", new AttributeValue { N = dao.Count.ToString() });
+            item.Add("HaberInventoryCode", new AttributeValue { S = dao.HaberCode });
+            item.Add("ItemDescription", new AttributeValue { S = dao.ItemDesc });
+            item.Add("Updated", new AttributeValue { N = dao.UpdateDate.ToString() });
+            item.Add("CriticalInventoryItem", new AttributeValue { BOOL = dao.CriticalInventoryItem });
+            item.Add("Category", new AttributeValue { S = dao.Category });
+            //and for the optionals...
+            if (IsVisibleItemSet(dao.Category))
+            {
+                item.Add("Brand", new AttributeValue { S = dao.Brand });
+                item.Add("BulbType", new AttributeValue { S = dao.BulbType });
+                item.Add("Color", new AttributeValue { S = dao.Color });
+                item.Add("Wattage", new AttributeValue { S = dao.Wattage });
+                item.Add("Length", new AttributeValue { S = dao.Length });
+            }
+
             var request = new PutItemRequest
             {
                 TableName = tableName,
-                Item = new Dictionary<string,AttributeValue>(){
-                    { "UPC", new AttributeValue { S = dao.Upc } },
-                    { "Count", new AttributeValue { N = dao.Count.ToString() } },
-                    { "HaberInventoryCode", new AttributeValue { S = dao.HaberCode } },
-                    { "ItemName", new AttributeValue { S = dao.ItemName } },
-                    { "ItemDescription", new AttributeValue { S = dao.ItemDesc } },
-                    { "Updated", new AttributeValue { N = dao.UpdateDate.ToString() } }
-                }
+                Item = item
             };
             var response = client.PutItem(request);
         }
@@ -166,7 +221,12 @@ namespace InventoryManagement
             Debug.WriteLine("Delete performed to " + dao.Upc);
         }
 
-        
+
+        internal static void UpdateProduct(string index, string attr, bool value)
+        {
+            Dictionary<string, AttributeValueUpdate> update = new Dictionary<string, AttributeValueUpdate>() { { attr, new AttributeValueUpdate { Action = AttributeAction.PUT, Value = new AttributeValue { BOOL = value } } } };
+            performUpdate(index, update);
+        }
 
         internal static void UpdateProduct(string index, string attr, int value)
         {
@@ -205,11 +265,18 @@ namespace InventoryManagement
     public class InventoryDAO
     {
         private string upc;
-        private string itemName;
+        
         private string itemDesc;
         private string haberCode;
         private int count;
         private long updateDate;
+        private bool criticalInventoryItem;
+        private string category;
+        private string brand;
+        private string color;
+        private string wattage;
+        private string bulbType;
+        private string length;
 
         public string Upc
         {
@@ -224,18 +291,7 @@ namespace InventoryManagement
             }
         }
 
-        public string ItemName
-        {
-            get
-            {
-                return itemName;
-            }
-
-            set
-            {
-                itemName = value;
-            }
-        }
+        
 
         public string ItemDesc
         {
@@ -286,6 +342,97 @@ namespace InventoryManagement
             set
             {
                 updateDate = value;
+            }
+        }
+
+        public bool CriticalInventoryItem
+        {
+            get
+            {
+                return criticalInventoryItem;
+            }
+
+            set
+            {
+                criticalInventoryItem = value;
+            }
+        }
+
+        public string Category
+        {
+            get
+            {
+                return category;
+            }
+
+            set
+            {
+                category = value;
+            }
+        }
+
+        public string Brand
+        {
+            get
+            {
+                return brand;
+            }
+
+            set
+            {
+                brand = value;
+            }
+        }
+
+        public string Color
+        {
+            get
+            {
+                return color;
+            }
+
+            set
+            {
+                color = value;
+            }
+        }
+
+        public string Wattage
+        {
+            get
+            {
+                return wattage;
+            }
+
+            set
+            {
+                wattage = value;
+            }
+        }
+
+        public string BulbType
+        {
+            get
+            {
+                return bulbType;
+            }
+
+            set
+            {
+                bulbType = value;
+            }
+        }
+
+        public string Length
+        {
+            get
+            {
+                return length;
+            }
+
+            set
+            {
+                length = value;
             }
         }
     }

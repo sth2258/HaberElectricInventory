@@ -43,7 +43,6 @@ c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\Antlr3.Runtime.pdb
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\Newtonsoft.Json.xml
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\Microsoft.AspNet.FriendlyUrls.xml
-c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\obj\Debug\InventoryManagement.csprojResolveAssemblyReference.cache
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\obj\Debug\InventoryManagement.dll
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\obj\Debug\InventoryManagement.pdb
 c:\users\administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\AWSSDK.Core.dll
@@ -76,3 +75,4 @@ C:\Users\Administrator\documents\visual studio 2015\Projects\InventoryManagement
 C:\Users\Administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\MailKit.xml
 C:\Users\Administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\MimeKit.xml
 C:\Users\Administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\bin\Zlib.Portable.xml
+C:\Users\Administrator\documents\visual studio 2015\Projects\InventoryManagement\InventoryManagement\obj\Debug\InventoryManagement.csprojResolveAssemblyReference.cache

@@ -17,47 +17,40 @@ namespace InventoryManagement
         protected void Page_Load(object sender, EventArgs e)
         {
             List<InventoryDAO> a = Inventory.GetAllProducts();
-            a.Sort((emp1, emp2) => emp1.ItemName.CompareTo(emp2.ItemName));
-            GridView1.DataSource = a;
+            a.Sort((emp1, emp2) => emp1.ItemDesc.CompareTo(emp2.ItemDesc));
+            GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, UpdateDate = g.UpdateDate });
             GridView1.DataBind();
 
             GridView1.HeaderRow.Cells[0].Text = "UPC";
-            GridView1.HeaderRow.Cells[1].Text = "Item Name";
-            GridView1.HeaderRow.Cells[2].Text = "Item Description";
-            GridView1.HeaderRow.Cells[3].Text = "Haber Electric Inventory Code";
-            GridView1.HeaderRow.Cells[4].Text = "Quantity";
-            GridView1.HeaderRow.Cells[5].Text = "Updated Date";
-
+            GridView1.HeaderRow.Cells[1].Text = "Item Description";
+            GridView1.HeaderRow.Cells[2].Text = "Haber Electric Inventory Code";
+            GridView1.HeaderRow.Cells[3].Text = "Quantity";
+            GridView1.HeaderRow.Cells[4].Text = "Updated Date";
+            
             for (int aa = 0; aa < GridView1.Rows.Count; aa++)
             {
-                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[5].Text));
-                GridView1.Rows[aa].Cells[5].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
+                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[4].Text));
+                GridView1.Rows[aa].Cells[4].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
 
         protected void btn_email_Click(object sender, EventArgs e)
         {
-            var fromAddress = new MailAddress("jira@haberelectric.com", "JIRA Technical User [HE Inventory]");
-
-            string fromPassword = (new StreamReader(ConfigurationManager.AppSettings["emailPsw"].ToString())).ReadToEnd();
+            var fromAddress = new MailAddress("root@"+Environment.MachineName, "HE Inventory");
             string subject = "Haber Electric Inventory List - " + DateTime.Now.ToShortDateString();
             string body = GetGridviewData(GridView1);
 
             var smtp = new SmtpClient
             {
-                Host = "smtp.gmail.com",
-                Port = 587,
-                EnableSsl = true,
-                DeliveryMethod = SmtpDeliveryMethod.Network,
-                UseDefaultCredentials = false,
-                Credentials = new NetworkCredential(fromAddress.Address, fromPassword)
+                Host = "localhost",
+                Port = 25
             };
             var message = new MailMessage();
             message.From = fromAddress;
-             message.To.Add(new MailAddress("arthur@haberelectric.com"));
-             message.To.Add(new MailAddress("guy@haberelectric.com"));
-             message.To.Add(new MailAddress("jaclyn@haberelectric.com"));
-            //message.To.Add(new MailAddress("steve.t.haber@gmail.com"));
+            //message.To.Add(new MailAddress("arthur@haberelectric.com"));
+            //message.To.Add(new MailAddress("guy@haberelectric.com"));
+            //message.To.Add(new MailAddress("jaclyn@haberelectric.com"));
+            
             message.IsBodyHtml = true;
             message.Subject = subject;
             message.Body = body;
@@ -75,5 +68,6 @@ namespace InventoryManagement
         {
             /* Verifies that the control is rendered */
         }
+
     }
 }

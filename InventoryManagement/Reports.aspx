@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Reports" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Reports.aspx.cs" Inherits="InventoryManagement.Reports" %>
+﻿<%@ Page Title="Reports" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" EnableEventValidation="false" CodeBehind="Reports.aspx.cs" Inherits="InventoryManagement.Reports" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <a href="#" onclick="PrintPage('GridTable')">Printer Friendly Format</a>
     <br /><br /><div id="GridTable"><asp:GridView ID="GridView1" runat="server"></asp:GridView></div>
