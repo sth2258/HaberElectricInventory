@@ -14,23 +14,30 @@ namespace InventoryManagement
 {
     public partial class Reports : System.Web.UI.Page
     {
+
+        protected void Page_Init(object sender, EventArgs e)
+        {
+
+            // Create the dropdown list items.
+
+            string[] categories = ("N/A," + ConfigurationManager.AppSettings["dd_Category"]).Split(',');
+           
+            AddItems(categories, dd_Category);
+         
+        }
+
+        private void AddItems(string[] items, DropDownList dd_lst)
+        {
+            foreach (string item in items)
+            {
+                dd_lst.Items.Add(new ListItem(item, item));
+            }
+        }
         protected void Page_Load(object sender, EventArgs e)
         {
-            List<InventoryDAO> a = Inventory.GetAllProducts();
-            a.Sort((emp1, emp2) => emp1.ItemDesc.CompareTo(emp2.ItemDesc));
-            GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, UpdateDate = g.UpdateDate });
-            GridView1.DataBind();
-
-            GridView1.HeaderRow.Cells[0].Text = "UPC";
-            GridView1.HeaderRow.Cells[1].Text = "Item Description";
-            GridView1.HeaderRow.Cells[2].Text = "Haber Electric Inventory Code";
-            GridView1.HeaderRow.Cells[3].Text = "Quantity";
-            GridView1.HeaderRow.Cells[4].Text = "Updated Date";
-            
-            for (int aa = 0; aa < GridView1.Rows.Count; aa++)
+            if (!this.IsPostBack)
             {
-                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[4].Text));
-                GridView1.Rows[aa].Cells[4].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
+                UpdateResults(true);
             }
         }
 
@@ -69,5 +76,62 @@ namespace InventoryManagement
             /* Verifies that the control is rendered */
         }
 
+        protected void dd_Category_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateResults(false);
+        }
+
+        protected void cb_CriticalOnly_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateResults(false);
+        }
+
+        protected void UpdateResults(bool noFilter)
+        {
+            
+            List<InventoryDAO> a = Inventory.GetAllProducts();
+            if (a.Count == 0) return;
+            a.Sort((emp1, emp2) => emp1.ItemDesc.CompareTo(emp2.ItemDesc));
+            
+            if (cb_CriticalOnly.Checked)
+            {
+                List<InventoryDAO> b = new List<InventoryDAO>();
+                foreach (InventoryDAO z in a)
+                {
+                    if (z.CriticalInventoryItem)
+                    {
+                        b.Add(z);
+                    }
+                }
+                a = b;
+            }
+            if (dd_Category.SelectedValue != "N/A")
+            {
+                List<InventoryDAO> b = new List<InventoryDAO>();
+                foreach (InventoryDAO z in a)
+                {
+                    if (z.Category == dd_Category.SelectedValue)
+                    {
+                        b.Add(z);
+                    }
+                }
+                a = b;
+            }
+            GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, Category = g.Category, UpdateDate = g.UpdateDate });
+            GridView1.DataBind();
+
+            GridView1.HeaderRow.Cells[0].Text = "UPC";
+            GridView1.HeaderRow.Cells[1].Text = "Item Description";
+            GridView1.HeaderRow.Cells[2].Text = "Haber Electric Inventory Code";
+            GridView1.HeaderRow.Cells[3].Text = "Quantity";
+            GridView1.HeaderRow.Cells[4].Text = "Category";
+            GridView1.HeaderRow.Cells[5].Text = "Updated Date";
+
+            for (int aa = 0; aa < GridView1.Rows.Count; aa++)
+            {
+                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[5].Text));
+                GridView1.Rows[aa].Cells[5].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
+            }
+        }
     }
 }

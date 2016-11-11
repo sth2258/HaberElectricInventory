@@ -13,6 +13,24 @@ namespace InventoryManagement {
     public partial class Reports {
         
         /// <summary>
+        /// dd_Category control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dd_Category;
+        
+        /// <summary>
+        /// cb_CriticalOnly control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox cb_CriticalOnly;
+        
+        /// <summary>
         /// GridView1 control.
         /// </summary>
         /// <remarks>

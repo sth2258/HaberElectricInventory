@@ -22,7 +22,7 @@ namespace InventoryManagement
         }
         public static List<InventoryDAO> GetAllProducts()
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.USEast1);
 
             // Modify the client so that it accesses a different region.
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
@@ -81,7 +81,6 @@ namespace InventoryManagement
                         case "Length":
                             dao.Length = row.Value.S;
                             break;
-
                     }
                 }
                 list.Add(dao);
@@ -178,7 +177,7 @@ namespace InventoryManagement
 
         internal static void PutProduct(InventoryDAO dao)
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.USEast1);
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
             string tableName = "HaberElectricInventory";
             Dictionary<string, AttributeValue> item = new Dictionary<string, AttributeValue>();
