@@ -4,8 +4,8 @@
     <h4>Filter:</h4>
     Category: <asp:DropDownList ID="dd_Category" runat="server" autopostback="true" OnSelectedIndexChanged="dd_Category_SelectedIndexChanged"></asp:DropDownList><br />
     Critical Inveotry Items Only: <asp:CheckBox ID="cb_CriticalOnly" autopostback="true" runat="server" OnCheckedChanged="cb_CriticalOnly_CheckedChanged" /><br /><br />
-    <a href="#" onclick="PrintPage('GridTable')">Printer Friendly Format</a>
-    <br /><br /><div id="GridTable"><asp:GridView ID="GridView1" runat="server"></asp:GridView></div>
+    <hr />
+    <div id="GridTable"><asp:GridView ID="GridView1" runat="server"></asp:GridView></div>
     
     
     <br /><br /><asp:Button ID="btn_email" runat="server" Text="E-Mail Current Inventory!" OnClick="btn_email_Click" />

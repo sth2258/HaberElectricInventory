@@ -43,25 +43,10 @@ namespace InventoryManagement
 
         protected void btn_email_Click(object sender, EventArgs e)
         {
-            var fromAddress = new MailAddress("root@"+Environment.MachineName, "HE Inventory");
+           
             string subject = "Haber Electric Inventory List - " + DateTime.Now.ToShortDateString();
             string body = GetGridviewData(GridView1);
-
-            var smtp = new SmtpClient
-            {
-                Host = "localhost",
-                Port = 25
-            };
-            var message = new MailMessage();
-            message.From = fromAddress;
-            //message.To.Add(new MailAddress("arthur@haberelectric.com"));
-            //message.To.Add(new MailAddress("guy@haberelectric.com"));
-            //message.To.Add(new MailAddress("jaclyn@haberelectric.com"));
-            
-            message.IsBodyHtml = true;
-            message.Subject = subject;
-            message.Body = body;
-            smtp.Send(message);
+            Utils.SendMail(subject, body);
         }
         public string GetGridviewData(GridView gv)
         {

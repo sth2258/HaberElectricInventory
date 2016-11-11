@@ -52,9 +52,9 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li><a runat="server" href="~/">Home</a></li>
-                        <li><a runat="server" href="~/NewItem.aspx">New Inventory Item</a></li>
-                        <li><a runat="server" href="~/Reports.aspx">Reports</a></li>
-                        <% /* <li><a runat="server" href="~/About">About</a></li> */ %>
+                        <li><a runat="server" href="~/NewItem">New Inventory Item</a></li>
+                        <li><a runat="server" href="~/Reports">Reports</a></li>
+                        <li><a runat="server" href="~/Alerts">Inventory Alerts</a></li>
                         <% /*<li><a runat="server" href="~/Contact">Contact</a></li>*/ %>
                     </ul>
                 </div>

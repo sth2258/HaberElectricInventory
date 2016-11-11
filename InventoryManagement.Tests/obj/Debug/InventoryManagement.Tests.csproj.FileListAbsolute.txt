@@ -68,3 +68,7 @@ D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests
 D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\obj\Debug\InventoryManagement.Tests.csprojResolveAssemblyReference.cache
 D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\obj\Debug\InventoryManagement.Tests.dll
 D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\obj\Debug\InventoryManagement.Tests.pdb
+D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\bin\Debug\InventoryManagement.pdb
+D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\bin\Debug\AWSSDK.DynamoDBv2.pdb
+D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\bin\Debug\AWSSDK.Core.pdb
+D:\Users\steve\Documents\GitHub\HaberElectricInventory\InventoryManagement.Tests\bin\Debug\InventoryManagement.Tests.dll.config

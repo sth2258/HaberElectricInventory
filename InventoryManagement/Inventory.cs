@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Web;
 
@@ -26,7 +27,7 @@ namespace InventoryManagement
 
             // Modify the client so that it accesses a different region.
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
-            
+
             string tableName = "HaberElectricInventory";
             var request = new ScanRequest
             {
@@ -38,7 +39,7 @@ namespace InventoryManagement
 
             List<InventoryDAO> list = new List<InventoryDAO>();
 
-            foreach(var item in result)
+            foreach (var item in result)
             {
                 InventoryDAO dao = new InventoryDAO();
                 foreach (var row in item)
@@ -81,6 +82,13 @@ namespace InventoryManagement
                         case "Length":
                             dao.Length = row.Value.S;
                             break;
+                        case "UpperBound":
+                            dao.UpperBound = row.Value.S;
+                            break;
+                        case "LowerBound":
+                            dao.LowerBound = row.Value.S;
+                            break;
+
                     }
                 }
                 list.Add(dao);
@@ -172,8 +180,10 @@ namespace InventoryManagement
                 }
             }
             return null;
-                
+
         }
+
+
 
         internal static void PutProduct(InventoryDAO dao)
         {
@@ -247,24 +257,85 @@ namespace InventoryManagement
 
         private static void performUpdate(string upc, Dictionary<string, AttributeValueUpdate> update)
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.USEast1);
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;
             string tableName = "HaberElectricInventory";
             var request = new UpdateItemRequest
             {
                 TableName = tableName,
                 Key = new Dictionary<string, AttributeValue>() { { "UPC", new AttributeValue { S = upc } } },
-                AttributeUpdates = update
+                AttributeUpdates = update               
             };
             var response = client.UpdateItem(request);
+            
             Debug.WriteLine("Update performed to " + upc);
+        }
+    }
+
+    internal class Utils
+    {
+        internal static string LoadRecipients()
+        {
+            StreamReader rt = new StreamReader(ConfigurationManager.AppSettings["emailRecips"].ToString());
+            return rt.ReadToEnd();
+        }
+        internal static string LoadCreds()
+        {
+            StreamReader rt = new StreamReader(ConfigurationManager.AppSettings["emailAuth"].ToString());
+            return rt.ReadToEnd();
+        }
+        public static void SendMail(string subject, string body)
+        {
+            string FROM = "jira@haberelectric.com";   // Replace with your "From" address. This address must be verified.
+            string TO = Utils.LoadRecipients();  // Replace with a "To" address. If your account is still in the
+                                                 // sandbox, this address must be verified.
+
+
+
+
+            // Supply your SMTP credentials below. Note that your SMTP credentials are different from your AWS credentials.
+            string SMTP_USERNAME = LoadCreds().Split(',')[0];  // Replace with your SMTP username. 
+            string SMTP_PASSWORD = LoadCreds().Split(',')[1];  // Replace with your SMTP password.
+
+            // Amazon SES SMTP host name. This example uses the US West (Oregon) region.
+            const String HOST = "email-smtp.us-east-1.amazonaws.com";
+
+            // The port you will connect to on the Amazon SES SMTP endpoint. We are choosing port 587 because we will use
+            // STARTTLS to encrypt the connection.
+            const int PORT = 587;
+
+            // Create an SMTP client with the specified host name and port.
+            using (System.Net.Mail.SmtpClient client = new System.Net.Mail.SmtpClient(HOST, PORT))
+            {
+                // Create a network credential with your SMTP user name and password.
+                client.Credentials = new System.Net.NetworkCredential(SMTP_USERNAME, SMTP_PASSWORD);
+
+                // Use SSL when accessing Amazon SES. The SMTP session will begin on an unencrypted connection, and then 
+                // the client will issue a STARTTLS command to upgrade to an encrypted connection using SSL.
+                client.EnableSsl = true;
+
+                // Send the email. 
+
+                System.Net.Mail.MailMessage msg = new System.Net.Mail.MailMessage
+                {
+                    Sender = new System.Net.Mail.MailAddress(FROM),
+                    IsBodyHtml = true,
+                    Subject = subject,
+                    Body = body
+                };
+                msg.To.Add(TO);
+                msg.From = new System.Net.Mail.MailAddress(FROM);
+                client.Send(msg);
+
+
+            }
         }
     }
 
     public class InventoryDAO
     {
         private string upc;
-        
+
         private string itemDesc;
         private string haberCode;
         private int count;
@@ -276,6 +347,8 @@ namespace InventoryManagement
         private string wattage;
         private string bulbType;
         private string length;
+        private string lowerBound;
+        private string upperBound;
 
         public string Upc
         {
@@ -290,7 +363,7 @@ namespace InventoryManagement
             }
         }
 
-        
+
 
         public string ItemDesc
         {
@@ -432,6 +505,32 @@ namespace InventoryManagement
             set
             {
                 length = value;
+            }
+        }
+
+        public string LowerBound
+        {
+            get
+            {
+                return lowerBound;
+            }
+
+            set
+            {
+                lowerBound = value;
+            }
+        }
+
+        public string UpperBound
+        {
+            get
+            {
+                return upperBound;
+            }
+
+            set
+            {
+                upperBound = value;
             }
         }
     }
