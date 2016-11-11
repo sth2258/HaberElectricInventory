@@ -22,6 +22,15 @@ namespace InventoryManagement {
         protected global::System.Web.UI.WebControls.DropDownList dd_Category;
         
         /// <summary>
+        /// dd_Brand control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.DropDownList dd_Brand;
+        
+        /// <summary>
         /// cb_CriticalOnly control.
         /// </summary>
         /// <remarks>

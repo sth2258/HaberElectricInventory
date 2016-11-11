@@ -3,6 +3,7 @@
     <br />
     <h4>Filter:</h4>
     Category: <asp:DropDownList ID="dd_Category" runat="server" autopostback="true" OnSelectedIndexChanged="dd_Category_SelectedIndexChanged"></asp:DropDownList><br />
+    Brand: <asp:DropDownList ID="dd_Brand" runat="server" autopostback="true" OnSelectedIndexChanged="dd_Brand_SelectedIndexChanged"></asp:DropDownList><br />
     Critical Inveotry Items Only: <asp:CheckBox ID="cb_CriticalOnly" autopostback="true" runat="server" OnCheckedChanged="cb_CriticalOnly_CheckedChanged" /><br /><br />
     <hr />
     <div id="GridTable"><asp:GridView ID="GridView1" runat="server"></asp:GridView></div>

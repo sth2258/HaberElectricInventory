@@ -21,9 +21,9 @@ namespace InventoryManagement
             // Create the dropdown list items.
 
             string[] categories = ("N/A," + ConfigurationManager.AppSettings["dd_Category"]).Split(',');
-           
+            string[] brands = ("N/A," + ConfigurationManager.AppSettings["dd_Brands"]).Split(',');
             AddItems(categories, dd_Category);
-         
+            AddItems(brands, dd_Brand);
         }
 
         private void AddItems(string[] items, DropDownList dd_lst)
@@ -75,7 +75,7 @@ namespace InventoryManagement
         {
             
             List<InventoryDAO> a = Inventory.GetAllProducts();
-            if (a.Count == 0) return;
+            
             a.Sort((emp1, emp2) => emp1.ItemDesc.CompareTo(emp2.ItemDesc));
             
             if (cb_CriticalOnly.Checked)
@@ -102,6 +102,20 @@ namespace InventoryManagement
                 }
                 a = b;
             }
+            if (dd_Brand.SelectedValue != "N/A")
+            {
+                List<InventoryDAO> b = new List<InventoryDAO>();
+                foreach (InventoryDAO z in a)
+                {
+                    if (z.Brand == dd_Brand.SelectedValue)
+                    {
+                        b.Add(z);
+                    }
+                }
+                a = b;
+            }
+
+            if (a.Count == 0) return;
             GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, Category = g.Category, UpdateDate = g.UpdateDate });
             GridView1.DataBind();
 
@@ -117,6 +131,11 @@ namespace InventoryManagement
                 DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[5].Text));
                 GridView1.Rows[aa].Cells[5].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
             }
+        }
+
+        protected void dd_Brand_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateResults(false);
         }
     }
 }
