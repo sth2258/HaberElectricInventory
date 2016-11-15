@@ -100,7 +100,7 @@ namespace InventoryManagement
 
         public static InventoryDAO GetProductByUPC(string text)
         {
-            AmazonDynamoDBClient client = new AmazonDynamoDBClient();
+            AmazonDynamoDBClient client = new AmazonDynamoDBClient(Amazon.RegionEndpoint.USEast1);
 
             // Modify the client so that it accesses a different region.
             client.Config.RegionEndpoint = Amazon.RegionEndpoint.USEast1;

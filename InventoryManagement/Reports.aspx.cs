@@ -116,7 +116,7 @@ namespace InventoryManagement
             }
 
             if (a.Count == 0) return;
-            GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, Category = g.Category, UpdateDate = g.UpdateDate });
+            GridView1.DataSource = a.Select(g => new { UPC = g.Upc, ItemName = g.ItemDesc, HECode = g.HaberCode, Quantity = g.Count, Category = g.Category, Brand = g.Brand, UpdateDate = g.UpdateDate });
             GridView1.DataBind();
 
             GridView1.HeaderRow.Cells[0].Text = "UPC";
@@ -124,12 +124,13 @@ namespace InventoryManagement
             GridView1.HeaderRow.Cells[2].Text = "Haber Electric Inventory Code";
             GridView1.HeaderRow.Cells[3].Text = "Quantity";
             GridView1.HeaderRow.Cells[4].Text = "Category";
-            GridView1.HeaderRow.Cells[5].Text = "Updated Date";
+            GridView1.HeaderRow.Cells[5].Text = "Brand";
+            GridView1.HeaderRow.Cells[6].Text = "Updated Date";
 
             for (int aa = 0; aa < GridView1.Rows.Count; aa++)
             {
-                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[5].Text));
-                GridView1.Rows[aa].Cells[5].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
+                DateTime real = new DateTime(long.Parse(GridView1.Rows[aa].Cells[6].Text));
+                GridView1.Rows[aa].Cells[6].Text = real.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
 
